@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Teacher Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .action-card {
+            transition: transform 0.3s;
+            cursor: pointer;
+            border: none;
+            border-left: 5px solid var(--primary);
+        }
+        .action-card:hover { transform: translateY(-5px); }
+        .icon-box { font-size: 2rem; color: var(--primary); }
+    </style>
+</head>
+<body style="background-color: #f8f9fc;">
+
+<nav class="navbar">
+    <div class="logo"><i class="fas fa-chalkboard-teacher"></i> Staff Portal</div>
+    <div class="user-profile" onclick="toggleMenu()">
+        <span class="user-name">Prof. A. Kulkarni</span>
+        <div class="user-avatar" style="background: #1cc88a;">AK</div>
+        <div class="dropdown-menu" id="userMenu">
+            <a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-secondary mb-0">Dashboard Overview</h3>
+        
+        <div class="d-flex align-items-center bg-white p-2 rounded shadow-sm border">
+            <span class="fw-bold me-2 text-muted"><i class="fas fa-filter"></i> Filter by Class:</span>
+            <select id="classSlicer" class="form-select form-select-sm" style="width: 150px;" onchange="updateCharts()">
+                <option value="all">All Classes</option>
+                <option value="te9">TE 9</option>
+                <option value="te10">TE 10</option>
+                <option value="te11">TE 11</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card shadow h-100">
+                <div class="card-header bg-white fw-bold text-primary">
+                    <i class="fas fa-chart-line"></i> Weekly Attendance Trend
+                </div>
+                <div class="card-body">
+                    <div style="height: 250px;"><canvas id="lineChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+                <div class="card-header bg-white fw-bold text-success">
+                    <i class="fas fa-chart-pie"></i> Today's Status
+                </div>
+                <div class="card-body">
+                    <div style="height: 250px;"><canvas id="donutChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-white fw-bold text-info">
+                    <i class="fas fa-chart-bar"></i> Total Class Performance (Avg Attendance %)
+                </div>
+                <div class="card-body">
+                    <div style="height: 300px;"><canvas id="barChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h5 class="mb-3 text-secondary">Quick Actions</h5>
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <div class="card action-card shadow p-4" onclick="location.href='mark_attendance.html'">
+                <div class="d-flex align-items-center">
+                    <div class="icon-box me-3"><i class="fas fa-check-square"></i></div>
+                    <div><h5 class="mb-1">Mark Attendance</h5><small class="text-muted">Record daily entries</small></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card action-card shadow p-4" style="border-left-color: #1cc88a;" onclick="location.href='teacher_view.html'">
+                <div class="d-flex align-items-center">
+                    <div class="icon-box me-3" style="color: #1cc88a;"><i class="fas fa-users"></i></div>
+                    <div><h5 class="mb-1">Student List</h5><small class="text-muted">View class records</small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleMenu(){ document.getElementById('userMenu').classList.toggle('show'); }
+    const chartConfig = { responsive: true, maintainAspectRatio: false };
+
+    // --- 1. DATASETS FOR SLICER LOGIC ---
+    // We store data for each class so we can swap it when the dropdown changes
+    const trends = {
+        'all': [72, 75, 78, 85],   // Average of all
+        'te9': [65, 70, 72, 75],   // TE9 Data
+        'te10': [80, 82, 85, 88],  // TE10 Data
+        'te11': [70, 75, 76, 82]   // TE11 Data
+    };
+
+    const dailyStatus = {
+        'all': [85, 15],  // Total Present/Absent
+        'te9': [70, 30],
+        'te10': [90, 10],
+        'te11': [80, 20]
+    };
+
+    // --- 2. INITIALIZE CHARTS ---
+    
+    // LINE CHART (Trend)
+    const lineCtx = document.getElementById('lineChart');
+    let lineChart = new Chart(lineCtx, {
+        type: 'line',
+        data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            datasets: [{
+                label: 'Attendance %',
+                data: trends.all, // Default to 'all'
+                borderColor: '#4e73df',
+                backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                fill: true,
+                tension: 0.3
+            }]
+        }, options: chartConfig
+    });
+
+    // DONUT CHART (Daily)
+    const donutCtx = document.getElementById('donutChart');
+    let donutChart = new Chart(donutCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Present', 'Absent'],
+            datasets: [{
+                data: dailyStatus.all, // Default to 'all'
+                backgroundColor: ['#1cc88a', '#e74a3b']
+            }]
+        }, options: chartConfig
+    });
+
+    // BAR CHART (Comparison - Static)
+    // Fixed: Now showing specific Class Averages, TE10 is visible
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels: ['TE 9', 'TE 10', 'TE 11'], // Explicit Class Names
+            datasets: [{
+                label: 'Class Average Attendance %',
+                data: [71, 86, 76], // Data matching the "trends" roughly
+                backgroundColor: ['#4e73df', '#36b9cc', '#6610f2'],
+                borderRadius: 5
+            }]
+        }, 
+        options: {
+            ...chartConfig,
+            scales: {
+                y: { beginAtZero: true, max: 100 }
+            }
+        }
+    });
+
+    // --- 3. SLICER FUNCTION ---
+    function updateCharts() {
+        // Get selected value (te9, te10, etc)
+        const selectedClass = document.getElementById('classSlicer').value;
+
+        // Update Line Chart Data
+        lineChart.data.datasets[0].data = trends[selectedClass];
+        lineChart.update();
+
+        // Update Donut Chart Data
+        donutChart.data.datasets[0].data = dailyStatus[selectedClass];
+        donutChart.update();
+    }
+</script>
+
+</body>
+</html>
