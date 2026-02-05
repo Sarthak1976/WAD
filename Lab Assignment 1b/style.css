@@ -1,0 +1,99 @@
+label {
+    display: inline-block;
+    width: 120px;
+    font-weight: 600;
+}
+
+/* Page background */
+body {
+    min-height: 100vh;
+    background: #764ba2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Heading */
+.heading h1 {
+    color: white;
+    margin-bottom: 40px;
+}
+
+/* Form container */
+.form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Form card */
+form.card {
+    background: white;
+    padding: 40px 50px;
+    width: 50%;
+    border-radius: 12px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+    width: 60%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #764ba2;
+}
+
+/* Radio & checkbox */
+input[type="radio"],
+input[type="checkbox"] {
+    width: auto;
+}
+
+/* Other textbox */
+#otherText {
+    display: none;
+}
+
+/* Errors */
+.error {
+    color: red;
+    font-size: 12px;
+    margin-left: 120px;
+    display: block;
+}
+
+/* Validation colors */
+.valid {
+    border: 2px solid green;
+}
+
+.invalid {
+    border: 2px solid red;
+}
+
+/* Button */
+button {
+    display: block;
+    margin: 20px auto 0;
+    background: #764ba2;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #5e3b8a;
+}
+

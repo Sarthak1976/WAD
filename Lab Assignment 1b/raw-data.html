@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Raw JSON Data</title>
+</head>
+<body>
+    <pre id="jsonDisplay" style="background: #f4f4f4; padding: 20px; border: 1px solid #ccc;"></pre>
+    
+    <br>
+    <div style="text-align: center; margin-top: 20px;">
+        <button type="button" id="clearBtn" style="background-color: #dc3545; color: white; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer;">
+            CLEAR ALL STORED DATA
+        </button>
+    </div>
+    <button onclick="window.location.href='index.html'">Back to Form</button>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Retrieve the data from local storage
+            const data = localStorage.getItem("registrationData");
+            
+            if (data) {
+                // Parse it and then stringify with spacing (4) to make it look clean
+                const jsonObject = JSON.parse(data);
+                document.getElementById("jsonDisplay").textContent = JSON.stringify(jsonObject, null, 4);
+            } else {
+                document.getElementById("jsonDisplay").textContent = "No data found.";
+            }
+
+
+            const clearBtn = document.getElementById("clearBtn");
+
+            clearBtn.addEventListener("click", () => {
+            // Confirmation check
+                if (confirm("Are you sure you want to permanently delete all stored entries?")) {
+                
+                // Remove only the project data
+                    localStorage.removeItem("registrationData");
+                
+                    alert("Storage cleared.");
+                
+                // Reload the page to show it's empty
+                    location.reload();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

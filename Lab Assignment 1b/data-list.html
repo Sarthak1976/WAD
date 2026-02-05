@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registered Data List</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .container { background: white; padding: 30px; border-radius: 12px; width: 90%; margin: 20px auto; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background: #764ba2; color: white; }
+    </style>
+</head>
+<body>
+    <div class="heading"><h1>Stored Registrations</h1></div>
+    <div class="container">
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>City</th>
+                    <th>Gender</th>
+                    <th>Hobbies</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+        <br>
+        <button onclick="window.location.href='index.html'">Back to Form</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const tableBody = document.getElementById("tableBody");
+            const storedData = JSON.parse(localStorage.getItem("registrationData")) || [];
+
+            storedData.forEach(user => {
+                const row = `<tr>
+                    <td>${user.name}</td>
+                    <td>${user.mobile}</td>
+                    <td>${user.email}</td>
+                    <td>${user.city}</td>
+                    <td>${user.gender}</td>
+                    <td>${user.hobbies.join(", ")}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        });
+    </script>
+</body>
+</html>
