@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+
+<body>
+
+<div data-role="page">
+
+    <div data-role="header" data-theme="b">
+        <h1>Register</h1>
+    </div>
+
+    <div data-role="navbar">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="register.html" class="ui-btn-active">Register</a></li>
+        </ul>
+    </div>
+
+    <div role="main" class="ui-content">
+
+        <form>
+            <label>Name:</label>
+            <input type="text" name="name">
+
+            <label>Email:</label>
+            <input type="email" name="email">
+
+            <label>Password:</label>
+            <input type="password" name="password">
+
+            <!-- Checkbox -->
+            <label>
+                <input type="checkbox"> Subscribe to newsletter
+            </label>
+
+            <!-- Radio buttons -->
+            <label>
+                <input type="radio" name="gender"> Male
+            </label>
+
+            <label>
+                <input type="radio" name="gender"> Female
+            </label>
+
+            <a href="index.html" class="ui-btn ui-btn-b">Submit</a>
+        </form>
+
+    </div>
+
+    <div data-role="footer">
+        <h4>© 2026 My Website</h4>
+    </div>
+</div>
+
+</body>
+</html>
